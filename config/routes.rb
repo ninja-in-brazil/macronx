@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
   devise_for :users
 
+  authenticate :user, ->(u) { u.admin? } do
+    mount Avo::Engine, at: "/avo"
+  end
+
   root "dashboards#index"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

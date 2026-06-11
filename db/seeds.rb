@@ -7,3 +7,13 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Create a default admin user for development. Change the email/password before running in production.
+if Rails.env.development?
+  admin = User.find_or_create_by!(email: "admin@example.com") do |u|
+    u.password = "password"
+    u.password_confirmation = "password"
+  end
+  admin.update!(admin: true) unless admin.admin?
+  puts "Admin user ready: #{admin.email}"
+end

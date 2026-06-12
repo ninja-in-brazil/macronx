@@ -19,6 +19,12 @@ gem "tailwindcss-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
 
+# API documentation
+gem "apipie-rails"
+
+# CORS support for API access from CLI clients (e.g. Ratatui)
+gem "rack-cors"
+
 # Authentication
 gem "devise"
 

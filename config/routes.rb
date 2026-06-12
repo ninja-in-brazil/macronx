@@ -7,6 +7,12 @@ Rails.application.routes.draw do
 
   resources :inboxes
 
+  namespace :api do
+    namespace :v1 do
+      resources :inboxes, only: %i[index show create]
+    end
+  end
+
   root "dashboards#index"
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

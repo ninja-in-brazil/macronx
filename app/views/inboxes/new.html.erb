@@ -1,0 +1,11 @@
+<div class="mb-8 flex items-center gap-x-3">
+  <%= link_to inboxes_path, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors duration-150" do %>
+    &larr; Inbox
+  <% end %>
+  <span class="text-gray-300">/</span>
+  <h1 class="text-2xl font-semibold text-gray-900">New Inbox</h1>
+</div>
+
+<div class="max-w-4xl rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+  <%= render 'form', inbox: @inbox %>
+</div>

@@ -1,0 +1,74 @@
+<div class="mb-8 flex items-center justify-between">
+  <div class="flex items-center gap-x-3">
+    <%= link_to inboxes_path, class: "text-sm text-gray-500 hover:text-gray-700 transition-colors duration-150" do %>
+      &larr; Inbox
+    <% end %>
+    <span class="text-gray-300">/</span>
+    <h1 class="text-2xl font-semibold text-gray-900"><%= @inbox.name.presence || '(untitled)' %></h1>
+  </div>
+  <div class="flex items-center gap-x-3">
+    <%= link_to 'Edit', edit_inbox_path(@inbox),
+          class: "inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-colors duration-150" %>
+    <%= button_to 'Delete', @inbox, method: :delete,
+          data: { turbo_confirm: "Delete \"#{@inbox.name}\"? This cannot be undone." },
+          class: "inline-flex items-center rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 shadow-sm ring-1 ring-inset ring-red-200 hover:bg-red-100 transition-colors duration-150 cursor-pointer" %>
+  </div>
+</div>
+
+<div class="max-w-4xl space-y-6">
+  <%# Basic info card %>
+  <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+    <div class="border-b border-gray-100 bg-gray-50 px-6 py-3">
+      <h2 class="text-sm font-semibold text-gray-700">Details</h2>
+    </div>
+    <dl class="divide-y divide-gray-100">
+      <div class="grid grid-cols-3 gap-4 px-6 py-4">
+        <dt class="text-sm font-medium text-gray-500">Name</dt>
+        <dd class="col-span-2 text-sm text-gray-900"><%= @inbox.name.presence || '—' %></dd>
+      </div>
+      <div class="grid grid-cols-3 gap-4 px-6 py-4">
+        <dt class="text-sm font-medium text-gray-500">Source</dt>
+        <dd class="col-span-2 text-sm text-gray-900">
+          <% if @inbox.source.present? %>
+            <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-700"><%= @inbox.source %></span>
+          <% else %>
+            <span class="text-gray-400">—</span>
+          <% end %>
+        </dd>
+      </div>
+      <div class="grid grid-cols-3 gap-4 px-6 py-4">
+        <dt class="text-sm font-medium text-gray-500">Summary</dt>
+        <dd class="col-span-2 text-sm text-gray-900"><%= @inbox.summary.presence || '—' %></dd>
+      </div>
+      <div class="grid grid-cols-3 gap-4 px-6 py-4">
+        <dt class="text-sm font-medium text-gray-500">Created</dt>
+        <dd class="col-span-2 text-sm text-gray-900"><%= @inbox.created_at.strftime('%B %d, %Y at %H:%M UTC') %></dd>
+      </div>
+      <div class="grid grid-cols-3 gap-4 px-6 py-4">
+        <dt class="text-sm font-medium text-gray-500">Updated</dt>
+        <dd class="col-span-2 text-sm text-gray-900"><%= @inbox.updated_at.strftime('%B %d, %Y at %H:%M UTC') %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <%# JSON fields side by side %>
+  <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+    <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-100 bg-gray-50 px-6 py-3">
+        <h2 class="text-sm font-semibold text-gray-700">Payload</h2>
+      </div>
+      <div class="p-4">
+        <pre class="overflow-auto rounded-md bg-gray-50 p-4 font-mono text-xs text-gray-800 leading-relaxed max-h-80"><%= JSON.pretty_generate(@inbox.payload || {}) %></pre>
+      </div>
+    </div>
+
+    <div class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+      <div class="border-b border-gray-100 bg-gray-50 px-6 py-3">
+        <h2 class="text-sm font-semibold text-gray-700">Metadata</h2>
+      </div>
+      <div class="p-4">
+        <pre class="overflow-auto rounded-md bg-gray-50 p-4 font-mono text-xs text-gray-800 leading-relaxed max-h-80"><%= JSON.pretty_generate(@inbox.metadata || {}) %></pre>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,7 +7,7 @@ module NavigationHelper
   #
   # To add a new item, append a hash here — no other changes required.
   NAV_ITEMS = [
-    { label: "Overview",  path: :root_path,  icon: "home" },
+    { label: "Inbox",     path: :inboxes_path, icon: "inbox" },
     { label: "Analytics", path: :root_path,  icon: "chart-bar" },
     { label: "Reports",   path: :root_path,  icon: "document-text" },
     { label: "Users",     path: :root_path,  icon: "users" },

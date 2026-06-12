@@ -17,7 +17,7 @@ class InboxesController < ApplicationController
     @inbox = Inbox.new(inbox_params)
 
     if @inbox.save
-      redirect_to @inbox, notice: 'Inbox was successfully created.'
+      redirect_to @inbox, notice: "Inbox was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -29,7 +29,7 @@ class InboxesController < ApplicationController
 
   def update
     if @inbox.update(inbox_params)
-      redirect_to @inbox, notice: 'Inbox was successfully updated.'
+      redirect_to @inbox, notice: "Inbox was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -37,7 +37,7 @@ class InboxesController < ApplicationController
 
   def destroy
     @inbox.destroy
-    redirect_to inboxes_path, notice: 'Inbox was successfully deleted.'
+    redirect_to inboxes_path, notice: "Inbox was successfully deleted."
   end
 
   private

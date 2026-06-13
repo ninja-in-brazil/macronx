@@ -5,7 +5,15 @@ Rails.application.routes.draw do
     mount Avo::Engine, at: "/avo"
   end
 
-  resources :inboxes
+  resources :inboxes do
+    member do
+      get  :process, action: :process_modal
+      patch :process, action: :mark_processed
+      patch :archive
+    end
+  end
+
+  resources :workflows
 
   namespace :settings do
     resource :api_token, only: %i[show update]

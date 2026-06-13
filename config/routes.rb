@@ -7,6 +7,10 @@ Rails.application.routes.draw do
 
   resources :inboxes
 
+  namespace :settings do
+    resource :api_token, only: %i[show update]
+  end
+
   namespace :api do
     namespace :v1 do
       resources :inboxes, only: %i[index show create]

@@ -7,11 +7,8 @@ module Api
 
       def authenticate_api_token!
         token = request.headers['Authorization']&.delete_prefix('Bearer ')
-        expected = Rails.application.credentials.api_token
-
-        return if expected.present? && ActiveSupport::SecurityUtils.secure_compare(token.to_s, expected)
-
-        render json: { error: 'Unauthorized' }, status: :unauthorized
+        @current_api_user = User.find_by(api_token: token) if token.present?
+        render json: { error: 'Unauthorized' }, status: :unauthorized unless @current_api_user
       end
     end
   end

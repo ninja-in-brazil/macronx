@@ -16,7 +16,7 @@ module NavigationHelper
   ].freeze
 
   NAV_SETTINGS_ITEMS = [
-    { label: "Settings", path: :root_path, icon: "cog-6-tooth" },
+    { label: "Settings", path: :settings_api_token_path, icon: "cog-6-tooth" },
     { label: "Feedback", path: :root_path, icon: "chat-bubble-left-ellipsis" }
   ].freeze
 

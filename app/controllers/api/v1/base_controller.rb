@@ -8,9 +8,9 @@ module Api
       private
 
       def authenticate_api_token!
-        token = request.headers['Authorization']&.delete_prefix('Bearer ')
+        token = request.headers["Authorization"]&.delete_prefix("Bearer ")
         @current_api_user = User.find_by_api_token(token) if token.present?
-        render json: { error: 'Unauthorized' }, status: :unauthorized unless @current_api_user
+        render json: { error: "Unauthorized" }, status: :unauthorized unless @current_api_user
       end
     end
   end

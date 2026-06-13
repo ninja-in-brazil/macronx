@@ -2,7 +2,34 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  has_secure_token :api_token
+  API_TOKEN_LENGTH = 24
 
-  alias_method :regenerate_api_token!, :regenerate_api_token
+  before_create :assign_api_token
+
+  def self.find_by_api_token(raw_token)
+    return nil if raw_token.blank?
+    find_by(api_token_digest: Digest::SHA256.hexdigest(raw_token))
+  end
+
+  def api_token
+    @plaintext_api_token
+  end
+
+  def regenerate_api_token
+    raw = SecureRandom.base58(API_TOKEN_LENGTH)
+    if update_column(:api_token_digest, Digest::SHA256.hexdigest(raw))
+      @plaintext_api_token = raw
+      true
+    else
+      false
+    end
+  end
+
+  private
+
+  def assign_api_token
+    raw = SecureRandom.base58(API_TOKEN_LENGTH)
+    self.api_token_digest = Digest::SHA256.hexdigest(raw)
+    @plaintext_api_token = raw
+  end
 end

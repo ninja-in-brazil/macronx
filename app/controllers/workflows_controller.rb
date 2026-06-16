@@ -16,7 +16,7 @@ class WorkflowsController < ApplicationController
     @workflow = Workflow.new(workflow_params)
 
     if @workflow.save
-      redirect_to @workflow, notice: 'Workflow was successfully created.'
+      redirect_to @workflow, notice: "Workflow was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class WorkflowsController < ApplicationController
 
   def update
     if @workflow.update(workflow_params)
-      redirect_to @workflow, notice: 'Workflow was successfully updated.'
+      redirect_to @workflow, notice: "Workflow was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class WorkflowsController < ApplicationController
 
   def destroy
     @workflow.destroy
-    redirect_to workflows_path, notice: 'Workflow was successfully deleted.'
+    redirect_to workflows_path, notice: "Workflow was successfully deleted."
   end
 
   private

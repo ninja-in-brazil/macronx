@@ -9,10 +9,10 @@ class InboxesController < ApplicationController
     }
 
     @inboxes = case params[:filter]
-               when 'processed' then Inbox.processed_items
-               when 'archived'  then Inbox.archived
-               else                  Inbox.unprocessed
-               end.order(created_at: :desc)
+    when "processed" then Inbox.processed_items
+    when "archived"  then Inbox.archived
+    else                  Inbox.unprocessed
+    end.order(created_at: :desc)
   end
 
   def show
@@ -27,7 +27,7 @@ class InboxesController < ApplicationController
     @inbox = Inbox.new(inbox_params)
 
     if @inbox.save
-      redirect_to @inbox, notice: 'Inbox was successfully created.'
+      redirect_to @inbox, notice: "Inbox was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -39,7 +39,7 @@ class InboxesController < ApplicationController
 
   def update
     if @inbox.update(inbox_params)
-      redirect_to @inbox, notice: 'Inbox was successfully updated.'
+      redirect_to @inbox, notice: "Inbox was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -47,7 +47,7 @@ class InboxesController < ApplicationController
 
   def destroy
     @inbox.destroy
-    redirect_to inboxes_path, notice: 'Inbox was successfully deleted.'
+    redirect_to inboxes_path, notice: "Inbox was successfully deleted."
   end
 
   def process_modal
@@ -57,7 +57,7 @@ class InboxesController < ApplicationController
 
   def mark_processed
     if @inbox.update(processed: true, workflow_id: params.dig(:inbox, :workflow_id))
-      redirect_to inboxes_path, notice: 'Inbox item successfully processed.'
+      redirect_to inboxes_path, notice: "Inbox item successfully processed."
     else
       @workflows = Workflow.order(:name)
       render :process, status: :unprocessable_entity
@@ -66,7 +66,7 @@ class InboxesController < ApplicationController
 
   def archive
     @inbox.update(archived: true)
-    redirect_to inboxes_path, notice: 'Inbox item archived.'
+    redirect_to inboxes_path, notice: "Inbox item archived."
   end
 
   private

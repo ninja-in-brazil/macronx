@@ -1,0 +1,52 @@
+<div class="mb-4 flex items-center justify-between">
+  <div class="flex items-center gap-x-1">
+    <%
+      tabs = [
+        { key: 'unprocessed', label: 'Unprocessed', count: counts[:unprocessed] },
+        { key: 'processed',   label: 'Processed',   count: counts[:processed] },
+        { key: 'archived',    label: 'Archived',     count: counts[:archived] }
+      ]
+    %>
+    <% tabs.each do |tab| %>
+      <%
+        active = current_filter == tab[:key]
+        tab_classes = if active
+          'inline-flex items-center gap-x-1.5 rounded-full px-3 py-1.5 text-sm font-medium bg-gray-900 text-white'
+        else
+          'inline-flex items-center gap-x-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 transition-colors duration-150'
+        end
+        count_classes = if active
+          'ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white/20 px-1.5 text-xs font-semibold text-white'
+        else
+          'ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-gray-200 px-1.5 text-xs font-semibold text-gray-600'
+        end
+      %>
+      <%= link_to inboxes_path(filter: tab[:key]), class: tab_classes do %>
+        <%= tab[:label] %>
+        <span class="<%= count_classes %>"><%= tab[:count] %></span>
+      <% end %>
+    <% end %>
+  </div>
+
+  <div class="flex items-center gap-x-2">
+    <div class="relative">
+      <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+        <svg class="h-4 w-4 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clip-rule="evenodd" />
+        </svg>
+      </div>
+      <input type="text" placeholder="Search inbox..."
+             class="block rounded-md border border-gray-300 bg-white py-1.5 pl-9 pr-3 text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500">
+    </div>
+    <button type="button" title="List view" class="rounded-md border border-gray-300 bg-white p-1.5 text-gray-500 shadow-sm hover:bg-gray-50 transition-colors duration-150">
+      <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75Zm0 10.5a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5a.75.75 0 0 1-.75-.75ZM2 10a.75.75 0 0 1 .75-.75h14.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" />
+      </svg>
+    </button>
+    <button type="button" title="Grid view" class="rounded-md border border-gray-300 bg-white p-1.5 text-gray-500 shadow-sm hover:bg-gray-50 transition-colors duration-150">
+      <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 0 0 2 4.25v2.5A2.25 2.25 0 0 0 4.25 9h2.5A2.25 2.25 0 0 0 9 6.75v-2.5A2.25 2.25 0 0 0 6.75 2h-2.5Zm0 9A2.25 2.25 0 0 0 2 13.25v2.5A2.25 2.25 0 0 0 4.25 18h2.5A2.25 2.25 0 0 0 9 15.75v-2.5A2.25 2.25 0 0 0 6.75 11h-2.5Zm9-9A2.25 2.25 0 0 0 11 4.25v2.5A2.25 2.25 0 0 0 13.25 9h2.5A2.25 2.25 0 0 0 18 6.75v-2.5A2.25 2.25 0 0 0 15.75 2h-2.5Zm0 9A2.25 2.25 0 0 0 11 13.25v2.5A2.25 2.25 0 0 0 13.25 18h2.5A2.25 2.25 0 0 0 18 15.75v-2.5A2.25 2.25 0 0 0 15.75 11h-2.5Z" clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+</div>

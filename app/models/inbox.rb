@@ -1,8 +1,16 @@
 class Inbox < ApplicationRecord
+  belongs_to :workflow, optional: true
+
   attr_accessor :payload_text, :metadata_text
 
   before_validation :set_default_name
   before_validation :parse_json_fields
+
+  validates :workflow_id, presence: true, if: :processed?
+
+  scope :unprocessed, -> { where(processed: false, archived: false) }
+  scope :processed_items, -> { where(processed: true, archived: false) }
+  scope :archived, -> { where(archived: true) }
 
   private
 

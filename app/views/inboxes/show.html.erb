@@ -1,11 +1,12 @@
-<div class="mb-8 flex items-center justify-between"
-     data-controller="keyboard-shortcuts">
+<div data-controller="keyboard-shortcuts">
+<div class="mb-8 flex items-center justify-between">
   <div class="flex items-center gap-x-3">
     <%= link_to inboxes_path,
           title: "Back to Inbox (u)",
           data: { keyboard_shortcuts_target: "trigger", keyboard_shortcuts_key: "u" },
-          class: "text-sm text-gray-500 hover:text-gray-700 transition-colors duration-150" do %>
+          class: "inline-flex items-center gap-x-1.5 text-sm text-gray-500 hover:text-gray-700 transition-colors duration-150" do %>
       &larr; Inbox
+      <kbd class="rounded border border-gray-200 bg-gray-100 px-1 py-0.5 font-mono text-xs font-normal text-gray-400">u</kbd>
     <% end %>
     <span class="text-gray-300">/</span>
     <h1 class="text-2xl font-semibold text-gray-900"><%= @inbox.name.presence || '(untitled)' %></h1>
@@ -81,3 +82,5 @@
     </div>
   </div>
 </div>
+
+</div><%# end keyboard-shortcuts %>

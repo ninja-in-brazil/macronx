@@ -36,9 +36,16 @@ export default class extends Controller {
   }
 
   handleKeydown(event) {
-    // Ignore when typing in form fields or contenteditable
-    const tag = event.target.tagName
-    if (["INPUT", "TEXTAREA", "SELECT"].includes(tag) || event.target.isContentEditable) return
+    // Ignore when typing in text-entry fields or contenteditable,
+    // but allow shortcuts when a checkbox/radio/button has focus.
+    const focused = event.target
+    if (focused.isContentEditable) return
+    if (focused.tagName === "TEXTAREA" || focused.tagName === "SELECT") return
+    if (focused.tagName === "INPUT") {
+      const textTypes = ["text", "email", "password", "search", "url", "tel",
+                         "number", "date", "time", "datetime-local", "month", "week"]
+      if (textTypes.includes(focused.type)) return
+    }
     // Ignore modifier combos (allow plain Shift only for ?)
     if (event.ctrlKey || event.metaKey || event.altKey) return
 
@@ -53,15 +60,15 @@ export default class extends Controller {
       return
     }
 
-    const el = this.shortcutMap[event.key]
-    if (!el) return
+    const trigger = this.shortcutMap[event.key]
+    if (!trigger) return
 
     event.preventDefault()
 
     // Skip disabled elements
-    if (el.disabled || el.getAttribute("aria-disabled") === "true") return
+    if (trigger.disabled || trigger.getAttribute("aria-disabled") === "true") return
 
-    el.click()
+    trigger.click()
   }
 
   toggleHelp() {

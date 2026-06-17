@@ -7,7 +7,7 @@ Rails.application.routes.draw do
 
   resources :inboxes do
     collection do
-      get  :bulk_process_modal
+      get :bulk_process_modal
       patch :bulk_process
       patch :bulk_archive
       delete :bulk_destroy

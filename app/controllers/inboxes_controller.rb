@@ -21,8 +21,8 @@ class InboxesController < ApplicationController
 
     @inboxes = @inboxes.where("source ILIKE ?", "%#{params[:source]}%") if params[:source].present?
 
-    sort_col = %w[name source created_at].include?(params[:sort]) ? params[:sort] : 'created_at'
-    direction = params[:direction] == 'asc' ? :asc : :desc
+    sort_col = %w[name source created_at].include?(params[:sort]) ? params[:sort] : "created_at"
+    direction = params[:direction] == "asc" ? :asc : :desc
     @inboxes = @inboxes.order(sort_col => direction)
   end
 
@@ -34,7 +34,7 @@ class InboxesController < ApplicationController
 
   def bulk_process
     workflow_id = params.dig(:inbox, :workflow_id)
-    return redirect_to inboxes_path, alert: 'Please select a workflow.' if workflow_id.blank?
+    return redirect_to inboxes_path, alert: "Please select a workflow." if workflow_id.blank?
 
     Inbox.where(id: params[:inbox_ids]).update_all(processed: true, workflow_id: workflow_id)
     redirect_to inboxes_path, notice: "#{params[:inbox_ids].to_a.size} item(s) processed."

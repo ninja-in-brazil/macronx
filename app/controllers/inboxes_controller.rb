@@ -23,7 +23,7 @@ class InboxesController < ApplicationController
 
     sort_col = %w[name source created_at].include?(params[:sort]) ? params[:sort] : "created_at"
     direction = params[:direction] == "asc" ? :asc : :desc
-    @inboxes = @inboxes.order(sort_col => direction)
+    @inboxes = @inboxes.includes(:tag).order(sort_col => direction)
   end
 
   def bulk_process_modal
@@ -55,6 +55,7 @@ class InboxesController < ApplicationController
 
   def new
     @inbox = Inbox.new(payload: {}, metadata: {})
+    @tags = Tag.order(:name)
     populate_json_text_fields
   end
 
@@ -64,11 +65,13 @@ class InboxesController < ApplicationController
     if @inbox.save
       redirect_to @inbox, notice: "Inbox was successfully created."
     else
+      @tags = Tag.order(:name)
       render :new, status: :unprocessable_entity
     end
   end
 
   def edit
+    @tags = Tag.order(:name)
     populate_json_text_fields
   end
 
@@ -76,6 +79,7 @@ class InboxesController < ApplicationController
     if @inbox.update(inbox_params)
       redirect_to @inbox, notice: "Inbox was successfully updated."
     else
+      @tags = Tag.order(:name)
       render :edit, status: :unprocessable_entity
     end
   end
@@ -116,6 +120,6 @@ class InboxesController < ApplicationController
   end
 
   def inbox_params
-    params.require(:inbox).permit(:name, :source, :summary, :payload_text, :metadata_text)
+    params.require(:inbox).permit(:name, :source, :summary, :tag_id, :payload_text, :metadata_text)
   end
 end

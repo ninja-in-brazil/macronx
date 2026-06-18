@@ -76,6 +76,7 @@
 
 <div data-controller="bulk-actions"
      data-bulk-actions-process-modal-url-value="<%= bulk_process_modal_inboxes_path %>"
+     data-bulk-actions-tag-modal-url-value="<%= bulk_tag_modal_inboxes_path %>"
      data-bulk-actions-archive-url-value="<%= bulk_archive_inboxes_path %>"
      data-bulk-actions-destroy-url-value="<%= bulk_destroy_inboxes_path %>">
   <%= render 'bulk_actions', count: @inboxes.size %>
@@ -122,6 +123,9 @@
                           data: { turbo_frame: 'modal' },
                           class: "text-indigo-600 hover:text-indigo-900 transition-colors duration-150" %>
                   <% end %>
+                  <%= link_to 'Tag', tag_inbox_path(inbox),
+                        data: { turbo_frame: 'modal' },
+                        class: "text-indigo-600 hover:text-indigo-900 transition-colors duration-150" %>
                   <% unless inbox.archived? %>
                     <%= button_to 'Archive', archive_inbox_path(inbox), method: :patch,
                           class: "text-gray-600 hover:text-gray-900 transition-colors duration-150 bg-transparent border-0 p-0 cursor-pointer font-medium" %>
@@ -206,6 +210,9 @@
                             data: { turbo_frame: 'modal' },
                             class: "text-indigo-600 hover:text-indigo-900 transition-colors duration-150" %>
                     <% end %>
+                    <%= link_to 'Tag', tag_inbox_path(inbox),
+                          data: { turbo_frame: 'modal' },
+                          class: "text-indigo-600 hover:text-indigo-900 transition-colors duration-150" %>
                     <% unless inbox.archived? %>
                       <%= button_to 'Archive', archive_inbox_path(inbox), method: :patch,
                             class: "text-gray-600 hover:text-gray-900 transition-colors duration-150 bg-transparent border-0 p-0 cursor-pointer font-medium" %>

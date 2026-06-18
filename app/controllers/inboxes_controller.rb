@@ -1,5 +1,5 @@
 class InboxesController < ApplicationController
-  before_action :set_inbox, only: %i[show edit update destroy process_modal mark_processed archive]
+  before_action :set_inbox, only: %i[show edit update destroy process_modal mark_processed archive tag_modal mark_tagged]
 
   def index
     @counts = {
@@ -48,6 +48,18 @@ class InboxesController < ApplicationController
   def bulk_destroy
     Inbox.where(id: params[:inbox_ids]).destroy_all
     redirect_to inboxes_path, notice: "Items deleted."
+  end
+
+  def bulk_tag_modal
+    @inbox_ids = Array(params[:inbox_ids])
+    @tags = Tag.order(:name)
+    render :bulk_tag
+  end
+
+  def bulk_tag
+    tag_id = params.dig(:inbox, :tag_id).presence
+    Inbox.where(id: params[:inbox_ids]).update_all(tag_id: tag_id)
+    redirect_to inboxes_path, notice: "#{params[:inbox_ids].to_a.size} item(s) tagged."
   end
 
   def show
@@ -106,6 +118,17 @@ class InboxesController < ApplicationController
   def archive
     @inbox.update(archived: true)
     redirect_to inboxes_path, notice: "Inbox item archived."
+  end
+
+  def tag_modal
+    @tags = Tag.order(:name)
+    render :tag
+  end
+
+  def mark_tagged
+    tag_id = params.dig(:inbox, :tag_id).presence
+    @inbox.update(tag_id: tag_id)
+    redirect_to inboxes_path, notice: "Tag updated."
   end
 
   private

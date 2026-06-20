@@ -34,6 +34,10 @@
         <kbd class="inline-flex items-center rounded border border-gray-200 bg-gray-100 px-1.5 py-0.5 font-mono text-xs text-gray-600">a</kbd>
       </li>
       <li class="flex items-center justify-between py-2.5">
+        <span class="text-sm text-gray-700">Delete</span>
+        <kbd class="inline-flex items-center rounded border border-gray-200 bg-gray-100 px-1.5 py-0.5 font-mono text-xs text-gray-600">d</kbd>
+      </li>
+      <li class="flex items-center justify-between py-2.5">
         <span class="text-sm text-gray-700">Back to Inbox</span>
         <kbd class="inline-flex items-center rounded border border-gray-200 bg-gray-100 px-1.5 py-0.5 font-mono text-xs text-gray-600">u</kbd>
       </li>
@@ -83,6 +87,7 @@
     <% if @inbox.archived? %>
       <%= button_to unarchive_inbox_path(@inbox), method: :patch,
             title: "Unarchive (a)",
+            form: { data: { turbo_confirm: "Restore \"#{@inbox.name}\" to inbox?" } },
             data: { keyboard_shortcuts_target: "trigger", keyboard_shortcuts_key: "a" },
             class: "inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" do %>
         Unarchive
@@ -91,6 +96,7 @@
     <% else %>
       <%= button_to archive_inbox_path(@inbox), method: :patch,
             title: "Archive (a)",
+            form: { data: { turbo_confirm: "Archive \"#{@inbox.name}\"? This will move it to the archive." } },
             data: { keyboard_shortcuts_target: "trigger", keyboard_shortcuts_key: "a" },
             class: "inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 transition-colors duration-150 cursor-pointer" do %>
         Archive
@@ -108,9 +114,14 @@
       <kbd class="rounded border border-gray-200 bg-gray-100 px-1 py-0.5 font-mono text-xs font-normal text-gray-500">e</kbd>
     <% end %>
 
-    <%= button_to 'Delete', @inbox, method: :delete,
-          data: { turbo_confirm: "Delete \"#{@inbox.name}\"? This cannot be undone." },
-          class: "inline-flex items-center rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 shadow-sm ring-1 ring-inset ring-red-200 hover:bg-red-100 transition-colors duration-150 cursor-pointer" %>
+    <%= button_to @inbox, method: :delete,
+          title: "Delete (d)",
+          form: { data: { turbo_confirm: "Delete \"#{@inbox.name}\"? This cannot be undone." } },
+          data: { keyboard_shortcuts_target: "trigger", keyboard_shortcuts_key: "d" },
+          class: "inline-flex items-center gap-x-1.5 rounded-md bg-red-50 px-3 py-2 text-sm font-semibold text-red-700 shadow-sm ring-1 ring-inset ring-red-200 hover:bg-red-100 transition-colors duration-150 cursor-pointer" do %>
+      Delete
+      <kbd class="rounded border border-gray-200 bg-gray-100 px-1 py-0.5 font-mono text-xs font-normal text-gray-500">d</kbd>
+    <% end %>
 
     <button title="Keyboard shortcuts (?)"
             data-action="click->keyboard-shortcuts#toggleHelp"

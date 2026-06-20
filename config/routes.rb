@@ -20,7 +20,7 @@ Rails.application.routes.draw do
       patch :process, action: :mark_processed
       patch :archive
       patch :unarchive
-      get  :tag, action: :tag_modal
+      get :tag, action: :tag_modal
       patch :tag, action: :mark_tagged
     end
   end

@@ -47,7 +47,7 @@ class InboxesController < ApplicationController
 
   def bulk_unarchive
     Inbox.where(id: params[:inbox_ids]).update_all(archived: false)
-    redirect_to inboxes_path(filter: 'archived'), notice: "#{params[:inbox_ids].to_a.size} item(s) restored to inbox."
+    redirect_to inboxes_path(filter: "archived"), notice: "#{params[:inbox_ids].to_a.size} item(s) restored to inbox."
   end
 
   def bulk_destroy
@@ -127,7 +127,7 @@ class InboxesController < ApplicationController
 
   def unarchive
     @inbox.update(archived: false)
-    redirect_to inboxes_path(filter: 'archived'), notice: "\"#{@inbox.name}\" restored to inbox."
+    redirect_to inboxes_path(filter: "archived"), notice: "\"#{@inbox.name}\" restored to inbox."
   end
 
   def tag_modal

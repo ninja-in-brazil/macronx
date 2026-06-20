@@ -33,6 +33,42 @@ Use this when scaffolding Tasks, Projects, or any similar resource:
 
 **Adapt per resource:** filter tab names, bulk action buttons, show-page action buttons, modal forms, status badges.
 
+## Index page header chrome (reuse this layout)
+
+Every new section index (Tasks, Projects, etc.) uses the **same three-tier header** shown in Inbox. Copy the partial structure from `app/views/inboxes/` — do not invent a new layout.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Title + subtitle          [Filters] [Sort] [+ New Item n] [?]  │  ← _header.html.erb
+├─────────────────────────────────────────────────────────────────┤
+│  [Tab ●count] [Tab ●count] ...     [Search...] [list] [grid]    │  ← _filter_tabs.html.erb
+├─────────────────────────────────────────────────────────────────┤
+│  ☐ N items                    [Process p] [Tag t] [Archive a] … │  ← _bulk_actions.html.erb
+└─────────────────────────────────────────────────────────────────┘
+│  list table or grid cards                                       │
+```
+
+| Tier | Partial | Same across sections | Adapt per resource |
+|------|---------|----------------------|-------------------|
+| 1 — Page header | `_header.html.erb` | Title/subtitle row, Filters + Sort disclosure buttons, `+ New` CTA with `n` shortcut, `?` help | Title, subtitle, filter fields in panel, sort columns |
+| 2 — Tabs + search | `_filter_tabs.html.erb` | Pill tabs with count badges, debounced search, list/grid toggle | Tab names/keys, counts hash, search placeholder |
+| 3 — Bulk bar | `_bulk_actions.html.erb` | Select-all + item count, disabled-until-selected buttons with `<kbd>` hints | Button labels, icons, bulk actions (Process/Tag → whatever fits) |
+
+**Fixed (don't change):** spacing, button styles, pill tab styling, search input shape, list/grid icon toggles, bulk bar card wrapper, keyboard shortcut wiring, disclosure/sort/search Stimulus hooks.
+
+**Variable (customize):** copy only — "Inbox" → "Tasks", tab labels, which filters appear in the panel, which bulk buttons show (and context-aware variants like Archive vs Unarchive).
+
+In `index.html.erb`, always render the three partials in order before the list/grid content:
+
+```erb
+<%= render 'header' %>
+<%= render 'filter_tabs', counts: @counts, current_filter: params[:filter] || 'default' %>
+<div data-controller="bulk-actions list-navigation" …>
+  <%= render 'bulk_actions', count: @resources.size, filter: params[:filter] %>
+  <%# table or grid %>
+</div>
+```
+
 ## Reusable Stimulus controllers
 
 These already exist in `app/javascript/controllers/` — wire them up, don't write new ones:

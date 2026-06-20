@@ -10,8 +10,9 @@ export default class extends Controller {
   }
 
   connect() {
-    const input = this.queryInput
-    if (input && input.value) {
+    if (sessionStorage.getItem("inbox-search-refocus")) {
+      sessionStorage.removeItem("inbox-search-refocus")
+      const input = this.queryInput
       // Use setTimeout(0) so focus runs after Turbo finishes rendering.
       setTimeout(() => {
         input.focus()
@@ -25,6 +26,7 @@ export default class extends Controller {
   }
 
   _doSubmit() {
+    sessionStorage.setItem("inbox-search-refocus", "1")
     this.element.requestSubmit()
   }
 

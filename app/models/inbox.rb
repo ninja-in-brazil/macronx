@@ -2,6 +2,8 @@ class Inbox < ApplicationRecord
   belongs_to :workflow, optional: true
   belongs_to :tag, optional: true
 
+  has_many_attached :attachments
+
   attr_accessor :payload_text, :metadata_text
 
   before_validation :set_default_name

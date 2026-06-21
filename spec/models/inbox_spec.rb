@@ -88,6 +88,21 @@ RSpec.describe Inbox, type: :model do
     end
   end
 
+  describe 'attachments' do
+    it 'can attach files' do
+      inbox = create(:inbox)
+      inbox.attachments.attach(
+        io: StringIO.new('hello'),
+        filename: 'hello.txt',
+        content_type: 'text/plain'
+      )
+      inbox.save!
+
+      expect(inbox.reload.attachments).to be_attached
+      expect(inbox.attachments.first.filename.to_s).to eq('hello.txt')
+    end
+  end
+
   describe 'persistence' do
     it 'saves and reloads jsonb fields correctly' do
       inbox = create(:inbox, payload: { 'key' => 'value' }, metadata: { 'env' => 'test' })

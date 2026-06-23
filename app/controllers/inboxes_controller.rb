@@ -23,7 +23,7 @@ class InboxesController < ApplicationController
 
     sort_col = %w[name source created_at].include?(params[:sort]) ? params[:sort] : "created_at"
     direction = params[:direction] == "asc" ? :asc : :desc
-    @inboxes = @inboxes.includes(:tag).order(sort_col => direction)
+    @inboxes = @inboxes.with_attached_attachments.includes(:tag).order(sort_col => direction)
   end
 
   def bulk_process_modal
@@ -77,13 +77,14 @@ class InboxesController < ApplicationController
   end
 
   def create
-    @inbox = Inbox.new(inbox_params)
+    @inbox = Inbox.new(inbox_params_without_attachments)
 
     if @inbox.save
+      attach_new_files
       redirect_to @inbox, notice: "Inbox was successfully created."
     else
       @tags = Tag.order(:name)
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -93,11 +94,14 @@ class InboxesController < ApplicationController
   end
 
   def update
-    if @inbox.update(inbox_params)
+    purge_attachments
+    attach_new_files
+
+    if @inbox.update(inbox_update_params)
       redirect_to @inbox, notice: "Inbox was successfully updated."
     else
       @tags = Tag.order(:name)
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -116,7 +120,7 @@ class InboxesController < ApplicationController
       redirect_to inboxes_path, notice: "Inbox item successfully processed."
     else
       @workflows = Workflow.order(:name)
-      render :process, status: :unprocessable_entity
+      render :process, status: :unprocessable_content
     end
   end
 
@@ -153,6 +157,35 @@ class InboxesController < ApplicationController
   end
 
   def inbox_params
-    params.require(:inbox).permit(:name, :source, :summary, :tag_id, :payload_text, :metadata_text)
+    params.require(:inbox).permit(:name, :source, :summary, :body, :tag_id, :payload_text, :metadata_text, attachments: [])
+  end
+
+  def inbox_update_params
+    inbox_params_without_attachments
+  end
+
+  def inbox_params_without_attachments
+    inbox_params.except(:attachments)
+  end
+
+  def attach_new_files
+    files = new_attachment_files
+    return if files.empty?
+
+    @inbox.attachments.attach(files)
+  end
+
+  def new_attachment_files
+    Array(params.dig(:inbox, :attachments)).select { |file| file.is_a?(ActionDispatch::Http::UploadedFile) }
+  end
+
+  def purge_attachments
+    signed_ids = Array(params.dig(:inbox, :purge_attachment_signed_ids)).compact_blank
+    return if signed_ids.empty?
+
+    signed_ids.each do |signed_id|
+      attachment = @inbox.attachments.find { |a| a.blob.signed_id == signed_id }
+      attachment&.purge
+    end
   end
 end

@@ -149,21 +149,21 @@ RSpec.describe 'Inboxes', type: :request do
       end
 
       context 'with invalid JSON in payload_text' do
-        it 're-renders the form with unprocessable_entity status' do
+        it 're-renders the form with unprocessable_content status' do
           post inboxes_path, params: {
             inbox: { name: 'Bad', payload_text: '{not valid json}', metadata_text: '{}' }
           }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to include('Invalid JSON')
         end
       end
 
       context 'with invalid JSON in metadata_text' do
-        it 're-renders the form with unprocessable_entity status' do
+        it 're-renders the form with unprocessable_content status' do
           post inboxes_path, params: {
             inbox: { name: 'Bad', payload_text: '{}', metadata_text: 'oops' }
           }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to include('Invalid JSON')
         end
       end
@@ -305,11 +305,11 @@ RSpec.describe 'Inboxes', type: :request do
       end
 
       context 'with invalid JSON' do
-        it 're-renders the form with unprocessable_entity status' do
+        it 're-renders the form with unprocessable_content status' do
           patch inbox_path(inbox), params: {
             inbox: { payload_text: 'bad', metadata_text: '{}' }
           }
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end

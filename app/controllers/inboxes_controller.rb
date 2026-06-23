@@ -84,7 +84,7 @@ class InboxesController < ApplicationController
       redirect_to @inbox, notice: "Inbox was successfully created."
     else
       @tags = Tag.order(:name)
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -101,7 +101,7 @@ class InboxesController < ApplicationController
       redirect_to @inbox, notice: "Inbox was successfully updated."
     else
       @tags = Tag.order(:name)
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -120,7 +120,7 @@ class InboxesController < ApplicationController
       redirect_to inboxes_path, notice: "Inbox item successfully processed."
     else
       @workflows = Workflow.order(:name)
-      render :process, status: :unprocessable_entity
+      render :process, status: :unprocessable_content
     end
   end
 

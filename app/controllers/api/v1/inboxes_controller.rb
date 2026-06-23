@@ -39,7 +39,7 @@ module Api
           attach_files(inbox)
           render json: serialize(inbox), status: :created
         else
-          render json: { errors: inbox.errors.as_json }, status: :unprocessable_entity
+          render json: { errors: inbox.errors.as_json }, status: :unprocessable_content
         end
       end
 

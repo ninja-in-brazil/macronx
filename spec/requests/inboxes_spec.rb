@@ -43,6 +43,35 @@ RSpec.describe 'Inboxes', type: :request do
         get inboxes_path
         expect(response.body).not_to include('Hidden from index')
       end
+
+      it 'includes a tag filter control' do
+        tag = create(:tag, name: 'Bug')
+
+        get inboxes_path
+
+        expect(response.body).to include('name="tag"')
+        expect(response.body).to include(tag.name)
+      end
+
+      it 'filters inboxes by tag' do
+        bug = create(:tag, name: 'Bug')
+        feature = create(:tag, name: 'Feature')
+        tagged_inbox = create(:inbox, name: 'Tagged bug item', tag: bug)
+        other_inbox = create(:inbox, name: 'Tagged feature item', tag: feature)
+
+        get inboxes_path, params: { tag: bug.id }
+
+        expect(response.body).to include(tagged_inbox.name)
+        expect(response.body).not_to include(other_inbox.name)
+      end
+
+      it 'preserves tag filtering across status tabs' do
+        tag = create(:tag, name: 'Bug')
+
+        get inboxes_path, params: { tag: tag.id }
+
+        expect(response.body).to include("tag=#{tag.id}")
+      end
     end
 
     describe 'GET /inboxes/:id' do

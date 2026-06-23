@@ -7,6 +7,7 @@ class InboxesController < ApplicationController
       processed: Inbox.processed_items.count,
       archived: Inbox.archived.count
     }
+    @tags = Tag.order(:name)
 
     @inboxes = case params[:filter]
     when "processed" then Inbox.processed_items
@@ -20,6 +21,7 @@ class InboxesController < ApplicationController
     end
 
     @inboxes = @inboxes.where("source ILIKE ?", "%#{params[:source]}%") if params[:source].present?
+    @inboxes = @inboxes.where(tag_id: params[:tag]) if params[:tag].present?
 
     sort_col = %w[name source created_at].include?(params[:sort]) ? params[:sort] : "created_at"
     direction = params[:direction] == "asc" ? :asc : :desc

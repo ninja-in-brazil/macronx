@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :inboxes, only: %i[index show create]
+      resources :tags, only: %i[index]
     end
   end
 

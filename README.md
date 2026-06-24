@@ -49,6 +49,7 @@ When an item cannot be processed automatically, it remains unprocessed in the in
 - Manual creation and editing of inbox items.
 - Source, tag, text search, and processed/archive filtering.
 - Tags with configurable badge colors.
+- Tag import from a user-editable YAML file.
 - Workflows that can be assigned when processing one or more inbox items.
 - Bulk actions for processing, archiving, unarchiving, tagging, and deleting inbox items.
 - API token management from the Settings area after sign-in.
@@ -103,6 +104,7 @@ The API also supports:
 
 - `GET /api/v1/inboxes`
 - `GET /api/v1/inboxes/:id`
+- `GET /api/v1/tags`
 
 ## Local development
 
@@ -131,6 +133,26 @@ http://localhost:3000
 ```
 
 `bin/setup` installs dependencies and prepares the database. `bin/dev` starts the local Rails development process through Foreman.
+
+### Seed your tags
+
+MacronX ships with a sample tag file at `config/tags.yml.example`. Copy it to `config/tags.yml`, edit the names and badge colors for your own workflow, then import it:
+
+```sh
+cp config/tags.yml.example config/tags.yml
+bin/rails tags:import FILE=config/tags.yml
+```
+
+The importer creates missing tags and skips tags that already exist, using a case-insensitive name check to avoid duplicates. Existing tags are not overwritten.
+
+The YAML format supports either strings or objects with `name` and optional `color`:
+
+```yaml
+tags:
+  - Research
+  - name: Review manually
+    color: bg-purple-100 text-purple-700
+```
 
 ## Security notes
 

@@ -33,6 +33,9 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
+# Ignore local tag import files; use config/tags.yml.example as the template.
+/config/tags.yml
+
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
